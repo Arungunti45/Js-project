@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" href="reviews.css">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Feedback Widget</title>
+</head>
+
+<body>
+
+  <div>
+    <h2>Leave Your Feedback</h2>
+
+    <div id="starRating" class="stars">
+      <span data-value="1">★</span>
+      <span data-value="2">★</span>
+      <span data-value="3">★</span>
+      <span data-value="4">★</span>
+      <span data-value="5">★</span>
+    </div>
+
+    <button id="likeBtn">Like ❤️</button><br><br>
+
+    <textarea id="commentBox" rows="4" cols="50" placeholder="Write a comment..."></textarea><br><br>
+
+    <button id="likeBtn" onclick="submitFeedback()">Submit</button>
+    <button id="likeBtn" onclick="shareFeedback()">Share</button>
+
+    <div id="outputArea" style="margin-top: 20px;"></div>
+  </div>
+
+  <script>
+    const stars = document.querySelectorAll('#starRating span');
+    let selectedRating = 0;
+
+    stars.forEach(star => {
+      star.addEventListener('click', () => {
+        selectedRating = parseInt(star.getAttribute('data-value'));
+        stars.forEach((s, index) => {
+          s.classList.toggle('selected', index < selectedRating);
+        });
+      });
+    });
+    const likeBtn = document.getElementById('likeBtn');
+    let liked = false;
+
+    likeBtn.addEventListener('click', () => {
+      liked = !liked;
+      likeBtn.classList.toggle('liked', liked);
+      likeBtn.textContent = liked ? 'Liked ❤️' : 'Like ❤️';
+    });
+    function submitFeedback() {
+      const comment = document.getElementById('commentBox').value.trim();
+      const output = document.getElementById('outputArea');
+
+      output.innerHTML = `
+        <h3>Your Feedback:</h3>
+        <p><strong>Rating:</strong> ${selectedRating} star${selectedRating === 1 ? '' : 's'}</p>
+        <p><strong>Comment:</strong> ${comment || 'No comment provided.'}</p>
+        <p><strong>Liked:</strong> ${liked ? 'Yes' : 'No'}</p>
+      `;
+    }
+    function shareFeedback() {
+      const comment = document.getElementById('commentBox').value.trim() || 'No comment';
+      const shareData = {
+        title: 'My Feedback',
+        text: `I rated ${selectedRating} star${selectedRating === 1 ? '' : 's'}.\nLiked: ${liked ? 'Yes' : 'No'}\nComment: "${comment}"`,
+        url: window.location.href
+      };
+
+      if (navigator.share) {
+        navigator.share(shareData)
+          .then(() => console.log('Feedback shared!'))
+          .catch(err => console.error('Sharing failed:', err));
+      } else {
+        alert('Sharing not supported on this browser.');
+      }
+    }
+  </script>
+</body>
+
+</html>

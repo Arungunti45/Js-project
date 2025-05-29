@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="login.css">
+  <title>login</title>
+</head>
+
+<body>
+  <form action="" id="form2" class="login">
+    <center>
+      <h2 class="sign">Login</h2>
+    </center>
+    <input type="email" id="loginEmail" placeholder="Email" required /><br><br>
+    <input type="password" id="loginPassword" placeholder="Password" required /><br>
+    <p class="rem">
+      <input type="checkbox" id="myCheckbox">Remember Me?
+    </p>
+    <button id="btn2" type="click">Login</button><br>
+    <p class="rem">Don’t have an account? <a href="Regestrition.html" id="log" onclick="log()">Register</a></p>
+  </form>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAfGJtlrk4InPdSM4SwTXJSgITuuPWS4YI",
+      authDomain: "rproject-1a061.firebaseapp.com",
+      projectId: "rproject-1a061",
+      storageBucket: "rproject-1a061.appspot.com",
+      messagingSenderId: "51736231152",
+      appId: "1:51736231152:web:1ca177f73e302b39925635"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const loginButton = document.getElementById("btn2");
+
+    loginButton.addEventListener("click", (event) => {
+      event.preventDefault();
+    
+
+
+      let emails = document.getElementById("loginEmail").value;
+      let passwords = document.getElementById("loginPassword").value;
+
+
+      signInWithEmailAndPassword(auth, emails, passwords)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          console.log("User logged in:", user);
+          alert("Login successful!");
+          window.location = "index.html";
+        })
+        .catch((error) => {
+          console.error("Login error:", error.message);
+          alert(`Login failed: ${error.message}`);
+        });
+    });
+
+
+  </script>
+
+</body>
+
+</html>

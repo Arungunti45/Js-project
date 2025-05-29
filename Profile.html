@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="profile.css">
+  <title>User Profile</title>
+</head>
+
+<body>
+  <div id="signout">
+    <button onclick="signOut()">Logout</button>
+  </div>
+
+  <script>
+    function deleteAllCookies() {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i];
+        const eqPos = cookie.indexOf("=");
+        const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+      }
+    }
+
+    function signOut() {
+      sessionStorage.clear();
+      localStorage.clear();
+      deleteAllCookies();
+      window.location.href = '/Regestrition.html';
+    }
+    const userData = localStorage.getItem("UserProfiles");
+
+    if (userData) {
+      try {
+        const data = JSON.parse(userData);
+
+        const container = document.createElement("div");
+        container.className = "profile-container";
+        const heading = document.createElement("h2");
+        heading.innerText = "User Profile";
+        const Firstname=document.createElement("p")
+        Firstname.innerText=`First Name: ${data.fname}` 
+        const lastName = document.createElement("p");
+        lastName.innerText = `Last Name: ${data.lname}`;
+        const email = document.createElement("p");
+        email.innerText = `Email: ${data.userEmail}`;
+
+        container.append(heading,Firstname, lastName, email);
+        document.body.appendChild(container);
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+      }
+    } else {
+      console.warn("No user data found in localStorage.");
+    }
+  </script>
+</body>
+
+</html>
