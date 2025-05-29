@@ -1,67 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="login.css">
-  <title>login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <style>
+body{
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;  /* Horizontal centering */
+      align-items: center; 
+      background-image: url(img.jpg);
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+    #form2{
+        border-radius: 2rem;
+        border:1px solid #181616;
+        width:30vw;
+        padding:2rem;
+       box-shadow: 0px 0px 10px 10px rgba(12, 12, 12, 0.7);
+    }
+    #btn2{
+        width:310px;
+        height: 6vh;
+        background-color:rgb(254, 253, 253);
+        border-radius: 2rem;
+        cursor: pointer;
+        border: none;
+    }
+    #btn2:hover{
+        background-color: rgba(225, 225, 225, 0.5);
+        box-shadow:1px 5px 7px 1px rgba(0,0,0,0.2) ;
+    }
+    #loginEmail,#loginPassword{
+       background: rgba(255,255,255,0.2);
+       border-radius: 1rem;
+       height: 4vh;
+       width:23.5vw;
+       border: none;
+    }
+    .name{
+        display: flex;
+        gap:6%;
+    }
+    .sign{
+        color: rgb(249, 250, 252);
+        font-size: 250%;
+    }
+    .rem{
+        color:rgb(246, 244, 244);
+    }
+    .login{
+        min-height: 50vh;
+        width: 300px;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        transition: 0.5s ease-in-out;
+    }
+#loginEmail::placeholder,#loginPassword::placeholder{
+  color: #fcfbfb;
+  font-size: 130%;
+  padding-left: 5%;
+}
+    </style>
 </head>
-
 <body>
-  <form action="" id="form2" class="login">
-    <center>
-      <h2 class="sign">Login</h2>
-    </center>
-    <input type="email" id="loginEmail" placeholder="Email" required /><br><br>
-    <input type="password" id="loginPassword" placeholder="Password" required /><br>
-    <p class="rem">
-      <input type="checkbox" id="myCheckbox">Remember Me?
-    </p>
-    <button id="btn2" type="click">Login</button><br>
-    <p class="rem">Don’t have an account? <a href="Regestrition.html" id="log" onclick="log()">Register</a></p>
-  </form>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+      <form action="" id="form2" class="login">
+        <center><h2 class="sign">Login</h2></center>
+        <input type="email"    id="loginEmail"    placeholder="Email"    required /><br><br>
+        <input type="password" id="loginPassword" placeholder="Password" required /><br>
+        <p class="rem">
+            <input type="checkbox" id="myCheckbox">Remember Me?
+        </p>
+        <button id="btn2" type="click">Login</button><br>
+        <p class="rem">Don’t have an account? <a href="index.html" id="log" onclick="log()">Register</a></p>
+        </form>
+ <script type="module">
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+            import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+          
+            const firebaseConfig = {
+              apiKey: "AIzaSyAfGJtlrk4InPdSM4SwTXJSgITuuPWS4YI",
+              authDomain: "rproject-1a061.firebaseapp.com",
+              projectId: "rproject-1a061",
+              storageBucket: "rproject-1a061.appspot.com",
+              messagingSenderId: "51736231152",
+              appId: "1:51736231152:web:1ca177f73e302b39925635"
+            };
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            const loginButton = document.getElementById("btn2");
+          
+            loginButton.addEventListener("click", (event) => {
+              event.preventDefault();
+          
+              const email = document.getElementById("loginEmail").value;
+              const password = document.getElementById("loginPassword").value;
+          
+              signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                  const user = userCredential.user;
+                  console.log("User logged in:", user);
+                  alert("Login successful!");
+                  window.location = "moviespage.html";
+                })
+                .catch((error) => {
+                  console.error("Login error:", error.message);
+                  alert(`Login failed: ${error.message}`);
+                });
+            });
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAfGJtlrk4InPdSM4SwTXJSgITuuPWS4YI",
-      authDomain: "rproject-1a061.firebaseapp.com",
-      projectId: "rproject-1a061",
-      storageBucket: "rproject-1a061.appspot.com",
-      messagingSenderId: "51736231152",
-      appId: "1:51736231152:web:1ca177f73e302b39925635"
-    };
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const loginButton = document.getElementById("btn2");
-
-    loginButton.addEventListener("click", (event) => {
-      event.preventDefault();
-    
-
-
-      let emails = document.getElementById("loginEmail").value;
-      let passwords = document.getElementById("loginPassword").value;
-
-
-      signInWithEmailAndPassword(auth, emails, passwords)
-        .then((userCredential) => {
-          const user = userCredential.user;
-          console.log("User logged in:", user);
-          alert("Login successful!");
-          window.location = "index.html";
-        })
-        .catch((error) => {
-          console.error("Login error:", error.message);
-          alert(`Login failed: ${error.message}`);
-        });
-    });
-
-
-  </script>
-
+        
+          </script>
+          
 </body>
-
 </html>
